@@ -79,7 +79,8 @@ public class Examen {
 	}
 
 	public void setPreguntas(List<Pregunta> preguntas) {
-		this.preguntas.clear(); // Importante limpiar antes la lista, ya que cada elemento será agregado en addPregunta(..)
+		this.preguntas.clear(); // Importante limpiar antes la lista, ya que cada elemento será agregado en
+								// addPregunta(..)
 		preguntas.forEach(this::addPregunta); // Cada pregunta se pasa al método addPregunta(..)
 	}
 
@@ -95,6 +96,18 @@ public class Examen {
 		// A esa pregunta le quitamos la referencia del examen, quedándo huérfana,
 		// de esa manera como está en orphanRemoval=true, se eliminará
 		pregunta.setExamen(null);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Examen other = (Examen) obj;
+		return this.id != null && this.id.equals(other.getId());
 	}
 
 	@Override
