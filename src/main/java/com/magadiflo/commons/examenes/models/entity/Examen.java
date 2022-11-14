@@ -7,9 +7,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -40,6 +42,9 @@ public class Examen {
 	@JsonIgnoreProperties(value = { "examen" }, allowSetters = true)
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "examen")
 	private List<Pregunta> preguntas;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Asignatura asignatura;
 
 	public Examen() {
 		this.preguntas = new ArrayList<>();
@@ -96,6 +101,14 @@ public class Examen {
 		// A esa pregunta le quitamos la referencia del examen, quedándo huérfana,
 		// de esa manera como está en orphanRemoval=true, se eliminará
 		pregunta.setExamen(null);
+	}
+
+	public Asignatura getAsignatura() {
+		return asignatura;
+	}
+
+	public void setAsignatura(Asignatura asignatura) {
+		this.asignatura = asignatura;
 	}
 
 	@Override
