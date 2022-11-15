@@ -17,6 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -36,6 +37,16 @@ public class Examen {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
 	private Date createAt;
+	
+	/**
+	 * @Transient, le especifica que esta propidad no es persistente, no está mapeado a un campo en la tabla de la BD.
+	 * Y eso es lo que queremos, queremos que este atributo no se encuentre en la BD, no esté mapeado a ningún campo,
+	 * y ¿por qué?, porque si lo mapeamos a la tabla y campo de examenes, si lo marcamos como true, se aplicará a todos
+	 * los alumnos, y es probable que algunos alumnos no hayan respondiendo este examen, y si agregamos este campo en la
+	 * BD, se agregará para todos y la idea es que sea solo para un alumno en particular
+	 */
+	@Transient
+	private boolean respondido;
 
 	// @JsonIgnoreProperties(..), Con esto evitamos la relación inversa (evitamos
 	// que se genera un ciclo ya que la relación es Bidireccional).
@@ -81,6 +92,14 @@ public class Examen {
 
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	public boolean isRespondido() {
+		return respondido;
+	}
+
+	public void setRespondido(boolean respondido) {
+		this.respondido = respondido;
 	}
 
 	public List<Pregunta> getPreguntas() {
@@ -136,6 +155,8 @@ public class Examen {
 		builder.append(nombre);
 		builder.append(", createAt=");
 		builder.append(createAt);
+		builder.append(", respondido=");
+		builder.append(respondido);
 		builder.append("]");
 		return builder.toString();
 	}
