@@ -25,13 +25,27 @@ public class Asignatura {
 
 	private String nombre;
 
+	/**
+	 * Como la relación entre padre e hijo (Asignatura) son del tipo FetchType.LAZY
+	 * (carga perezosa) en la relación ManyToOne - OneToMany, por detrás de escena
+	 * se genera un proxy, por lo tanto cuando el padre llama a los hijos con el
+	 * get... y lo mismo cuando el hijo llama al padre con el get..., ahí recién se
+	 * hace la consulta y trae los hijos o el padre, pero es un proxy. Este proxy
+	 * también maneja atributos que al final se traducen en el JSON y estos
+	 * atributos a veces provocan errores y es importante tener que deshabilitarlos,
+	 * sobre todo cuando la relación es Bidireccional, como en este caso Padre <->
+	 * Hijo.
+	 * 
+	 * Esos atributos a omitir son: "handler", "hibernateLazyInitializer"
+	 */
+
 	// Muchas asignaturas hijas asociadas a un padre
-	@JsonIgnoreProperties(value = { "hijos" })
+	@JsonIgnoreProperties(value = { "hijos", "handler", "hibernateLazyInitializer" })
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Asignatura padre;
 
 	// Una asignatura, muchos hijos
-	@JsonIgnoreProperties(value = { "padre" }, allowSetters = true)
+	@JsonIgnoreProperties(value = { "padre", "handler", "hibernateLazyInitializer" }, allowSetters = true)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "padre", cascade = CascadeType.ALL)
 	private List<Asignatura> hijos;
 

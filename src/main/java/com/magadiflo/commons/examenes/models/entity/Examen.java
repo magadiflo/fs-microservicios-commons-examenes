@@ -37,13 +37,16 @@ public class Examen {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_at")
 	private Date createAt;
-	
+
 	/**
-	 * @Transient, le especifica que esta propidad no es persistente, no está mapeado a un campo en la tabla de la BD.
-	 * Y eso es lo que queremos, queremos que este atributo no se encuentre en la BD, no esté mapeado a ningún campo,
-	 * y ¿por qué?, porque si lo mapeamos a la tabla y campo de examenes, si lo marcamos como true, se aplicará a todos
-	 * los alumnos, y es probable que algunos alumnos no hayan respondiendo este examen, y si agregamos este campo en la
-	 * BD, se agregará para todos y la idea es que sea solo para un alumno en particular
+	 * @Transient, le especifica que esta propidad no es persistente, no está
+	 * mapeado a un campo en la tabla de la BD. Y eso es lo que queremos, queremos
+	 * que este atributo no se encuentre en la BD, no esté mapeado a ningún campo, y
+	 * ¿por qué?, porque si lo mapeamos a la tabla y campo de examenes, si lo
+	 * marcamos como true, se aplicará a todos los alumnos, y es probable que
+	 * algunos alumnos no hayan respondiendo este examen, y si agregamos este campo
+	 * en la BD, se agregará para todos y la idea es que sea solo para un alumno en
+	 * particular
 	 */
 	@Transient
 	private boolean respondido;
@@ -59,7 +62,11 @@ public class Examen {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Asignatura asignatura;
+	private Asignatura asignaturaPadre;
+
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Asignatura asignaturaHija;
 
 	public Examen() {
 		this.preguntas = new ArrayList<>();
@@ -126,12 +133,20 @@ public class Examen {
 		pregunta.setExamen(null);
 	}
 
-	public Asignatura getAsignatura() {
-		return asignatura;
+	public Asignatura getAsignaturaPadre() {
+		return asignaturaPadre;
 	}
 
-	public void setAsignatura(Asignatura asignatura) {
-		this.asignatura = asignatura;
+	public void setAsignaturaPadre(Asignatura asignaturaPadre) {
+		this.asignaturaPadre = asignaturaPadre;
+	}
+
+	public Asignatura getAsignaturaHija() {
+		return asignaturaHija;
+	}
+
+	public void setAsignaturaHija(Asignatura asignaturaHija) {
+		this.asignaturaHija = asignaturaHija;
 	}
 
 	@Override
