@@ -60,11 +60,21 @@ public class Examen {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "examen")
 	private List<Pregunta> preguntas;
 
+	// @JsonIgnoreProperties(value = { "handler", "hibernateLazyInitializer" }), 
+	// ver en el Entity Asignatura la explicación del por qué se coloca esos atributos.
+	// Pero en resumen, es porque a veces muestra error, ya que internamente el 
+	// hibernate genera un proxy con estos atributos propios, las cuales debemos
+	// omitir. En el tutorial lo agregó en el entity Asignatura, en las dos relaciones
+	// padre e hijo, pero cuando yo ejecuté el proyecto, el error se producía 
+	// el atributo asignaturaPadre de esta clase, por eso lo agregué tamién aquí.
+	// Además lo agregué también en el atributo asignaturaHija
 	@NotNull
+	@JsonIgnoreProperties(value = { "handler", "hibernateLazyInitializer" })
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Asignatura asignaturaPadre;
 
 	@NotNull
+	@JsonIgnoreProperties(value = { "handler", "hibernateLazyInitializer" })
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Asignatura asignaturaHija;
 
